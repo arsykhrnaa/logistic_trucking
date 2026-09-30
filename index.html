@@ -1,0 +1,1585 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogiTrack Express - Management & Tracking System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- JsBarcode Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .bg-grid-pattern {
+        background-color: #f8fafc;
+        background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col"
+  >
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+      <div
+        class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="bg-blue-600 p-2 rounded-lg text-white">
+            <i class="fa-solid fa-truck-fast text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight text-white">
+              LogiTrack Express
+            </h1>
+            <p class="text-xs text-slate-400">
+              Sistem Pelacakan Logistik Real-Time
+            </p>
+          </div>
+        </div>
+
+        <!-- TAB NAVIGATION & LOGIN STATUS -->
+        <div class="flex items-center space-x-3">
+          <nav
+            class="flex bg-slate-800 p-1 rounded-xl text-xs sm:text-sm font-medium"
+          >
+            <button
+              onclick="switchTab('infographic')"
+              id="tab-infographic"
+              class="px-3 py-2 rounded-lg transition-all text-blue-400 bg-slate-700 shadow-sm"
+            >
+              <i class="fa-solid fa-map-location-dot mr-1"></i> Panduan
+            </button>
+            <button
+              onclick="switchTab('tracking')"
+              id="tab-tracking"
+              class="px-3 py-2 rounded-lg transition-all text-slate-300 hover:text-white"
+            >
+              <i class="fa-solid fa-magnifying-glass mr-1"></i> Lacak Paket
+            </button>
+            <button
+              onclick="switchTab('dashboard')"
+              id="tab-dashboard"
+              class="px-3 py-2 rounded-lg transition-all text-slate-300 hover:text-white"
+            >
+              <i class="fa-solid fa-chart-line mr-1"></i> Dashboard Admin
+            </button>
+          </nav>
+
+          <!-- Auth Button -->
+          <div id="auth-btn-container">
+            <button
+              onclick="openLoginModal()"
+              id="btn-login"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center space-x-1"
+            >
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span>Login Admin</span>
+            </button>
+            <button
+              onclick="logoutAdmin()"
+              id="btn-logout"
+              class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center space-x-1 hidden"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+      <!-- ==================== TAB 1: PANDUAN SISTEM (INFOGRAFIS) ==================== -->
+      <section id="page-infographic" class="space-y-8">
+        <!-- Header Banner -->
+        <div
+          class="bg-emerald-900 text-white p-6 rounded-2xl shadow-md border border-emerald-800 bg-grid-pattern relative overflow-hidden"
+        >
+          <div class="relative z-10">
+            <h2
+              class="text-2xl sm:text-3xl font-extrabold text-emerald-300 tracking-wide"
+            >
+              PANDUAN SISTEM PELACAKAN LOGISTIK BERBASIS TRACKING ID
+            </h2>
+            <p class="text-emerald-100 font-semibold mt-1">
+              ALUR PROSES PELACAKAN PENGIRIMAN (The Shipment Journey)
+            </p>
+          </div>
+        </div>
+
+        <!-- Step Cards (User Journey) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Step 1 -->
+          <div
+            class="bg-white rounded-xl border-2 border-emerald-700 overflow-hidden shadow-sm hover:shadow-md transition"
+          >
+            <div
+              class="bg-emerald-800 text-white px-4 py-2 font-bold text-sm flex justify-between items-center"
+            >
+              <span>1. PENERIMAAN PAKET</span>
+              <span class="text-xs bg-emerald-900 px-2 py-0.5 rounded"
+                >(Form)</span
+              >
+            </div>
+            <div class="p-4 space-y-2 text-xs text-slate-700">
+              <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                <p class="font-semibold text-emerald-800">
+                  <i class="fa-solid fa-user-pen mr-1"></i> Input Data Penerima
+                </p>
+                <p class="text-slate-500">Isi Nama, Alamat & Layanan Paket</p>
+              </div>
+              <ul class="space-y-1 pl-2">
+                <li>
+                  <i class="fa-solid fa-check text-emerald-600 mr-1"></i> Isi
+                  Data Pengirim & Penerima
+                </li>
+                <li>
+                  <i class="fa-solid fa-check text-emerald-600 mr-1"></i> Pilih
+                  Layanan (Express/Eco)
+                </li>
+                <li>
+                  <i class="fa-solid fa-check text-emerald-600 mr-1"></i>
+                  Tentukan Alamat Tujuan
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div
+            class="bg-white rounded-xl border-2 border-emerald-700 overflow-hidden shadow-sm hover:shadow-md transition"
+          >
+            <div
+              class="bg-emerald-800 text-white px-4 py-2 font-bold text-sm flex justify-between items-center"
+            >
+              <span>2. GENERATE ID</span>
+              <span class="text-xs bg-emerald-900 px-2 py-0.5 rounded"
+                >(QR & Barcode)</span
+              >
+            </div>
+            <div class="p-4 space-y-2 text-xs text-slate-700 text-center">
+              <div
+                class="bg-slate-50 p-3 rounded border border-slate-200 flex flex-col items-center"
+              >
+                <i class="fa-solid fa-qrcode text-4xl text-slate-800 mb-1"></i>
+                <span class="font-mono font-bold text-slate-800"
+                  >LOG-882910</span
+                >
+              </div>
+              <p class="font-semibold text-emerald-800">
+                Sistem Membuat ID Pelacakan Digital
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div
+            class="bg-white rounded-xl border-2 border-emerald-700 overflow-hidden shadow-sm hover:shadow-md transition"
+          >
+            <div
+              class="bg-emerald-800 text-white px-4 py-2 font-bold text-sm flex justify-between items-center"
+            >
+              <span>3. PENGIRIMAN & UPDATING</span>
+            </div>
+            <div class="p-4 space-y-2 text-xs text-slate-700">
+              <div
+                class="bg-slate-50 p-2 rounded border border-slate-200 flex justify-around text-center"
+              >
+                <div>
+                  <i class="fa-solid fa-truck text-emerald-700 text-lg"></i>
+                  <p>In Transit</p>
+                </div>
+                <div>
+                  <i class="fa-solid fa-motorcycle text-blue-600 text-lg"></i>
+                  <p>Kurir</p>
+                </div>
+              </div>
+              <ul class="space-y-1 pl-2">
+                <li>
+                  <i class="fa-solid fa-barcode text-slate-600 mr-1"></i> Scan
+                  QR/Barcode di Setiap Pos
+                </li>
+                <li>
+                  <i class="fa-solid fa-clock text-slate-600 mr-1"></i> Update
+                  Status Real-Time
+                </li>
+                <li>
+                  <i class="fa-solid fa-location-dot text-slate-600 mr-1"></i>
+                  Perkiraan Waktu Tiba
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div
+            class="bg-white rounded-xl border-2 border-emerald-700 overflow-hidden shadow-sm hover:shadow-md transition"
+          >
+            <div
+              class="bg-emerald-800 text-white px-4 py-2 font-bold text-sm flex justify-between items-center"
+            >
+              <span>4. RIWAYAT & BUKTI</span>
+            </div>
+            <div class="p-4 space-y-2 text-xs text-slate-700">
+              <div
+                class="bg-emerald-50 p-2 rounded border border-emerald-200 text-emerald-800 font-semibold text-center"
+              >
+                <i class="fa-solid fa-file-signature mr-1"></i> Bukti Penerimaan
+                (POD)
+              </div>
+              <ul class="space-y-1 pl-2">
+                <li>
+                  <i class="fa-solid fa-check-circle text-emerald-600 mr-1"></i>
+                  Bukti Tanda Tangan Digital
+                </li>
+                <li>
+                  <i class="fa-solid fa-camera text-emerald-600 mr-1"></i> Foto
+                  Penerimaan Paket
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle text-emerald-500 mr-1"></i>
+                  Status: <b>DONE / Selesai</b>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Key Features & System Structure -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div
+            class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
+          >
+            <h3
+              class="font-extrabold text-slate-800 text-lg mb-4 tracking-wide uppercase border-b pb-2"
+            >
+              KEY FEATURES
+              <span class="text-emerald-700">(Fitur Unggulan)</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div
+                class="bg-emerald-800 text-white p-3 rounded-xl flex items-center space-x-3"
+              >
+                <i class="fa-solid fa-mobile-screen text-2xl"></i>
+                <span class="text-xs font-semibold"
+                  >Pelacakan Tanpa Kertas (Digital Tracking ID)</span
+                >
+              </div>
+              <div
+                class="bg-emerald-800 text-white p-3 rounded-xl flex items-center space-x-3"
+              >
+                <i class="fa-solid fa-bell text-2xl"></i>
+                <span class="text-xs font-semibold"
+                  >Notifikasi Status Otomatis (SMS/Email)</span
+                >
+              </div>
+              <div
+                class="bg-emerald-800 text-white p-3 rounded-xl flex items-center space-x-3"
+              >
+                <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+                <span class="text-xs font-semibold"
+                  >Estimasi Waktu Tepat (AI Estimated Delivery)</span
+                >
+              </div>
+              <div
+                class="bg-emerald-800 text-white p-3 rounded-xl flex items-center space-x-3"
+              >
+                <i class="fa-solid fa-boxes-stacked text-2xl"></i>
+                <span class="text-xs font-semibold"
+                  >Riwayat Pengiriman Terpusat (Admin Dashboard)</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
+          >
+            <h3
+              class="font-extrabold text-slate-800 text-lg mb-4 tracking-wide uppercase border-b pb-2"
+            >
+              STRUKTUR SISTEM
+              <span class="text-emerald-700">(System Structure)</span>
+            </h3>
+            <div
+              class="grid grid-cols-4 gap-2 text-center text-xs font-bold text-slate-700 pt-4"
+            >
+              <div class="space-y-2">
+                <div
+                  class="bg-slate-100 p-3 rounded-xl border border-slate-300 text-emerald-800 text-2xl"
+                >
+                  <i class="fa-solid fa-mobile-button"></i>
+                </div>
+                <p>Aplikasi Kurir Mobile</p>
+              </div>
+              <div class="space-y-2">
+                <div
+                  class="bg-slate-100 p-3 rounded-xl border border-slate-300 text-emerald-800 text-2xl"
+                >
+                  <i class="fa-solid fa-desktop"></i>
+                </div>
+                <p>Dashboard Web Admin</p>
+              </div>
+              <div class="space-y-2">
+                <div
+                  class="bg-slate-100 p-3 rounded-xl border border-slate-300 text-emerald-800 text-2xl"
+                >
+                  <i class="fa-solid fa-server"></i>
+                </div>
+                <p>Server Logistik</p>
+              </div>
+              <div class="space-y-2">
+                <div
+                  class="bg-slate-100 p-3 rounded-xl border border-slate-300 text-emerald-800 text-2xl"
+                >
+                  <i class="fa-solid fa-database"></i>
+                </div>
+                <p>Database Pelacakan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: CEK STATUS / LACAK PAKET ==================== -->
+      <section id="page-tracking" class="space-y-6 hidden">
+        <!-- Search Box Banner -->
+        <div class="bg-blue-600 rounded-2xl p-6 sm:p-8 text-white shadow-md">
+          <span
+            class="text-xs font-bold tracking-widest uppercase bg-blue-700 px-3 py-1 rounded-full text-blue-100"
+            >Pelacakan Real-Time</span
+          >
+          <h2 class="text-2xl sm:text-3xl font-extrabold mt-3">
+            Cek Status Pengiriman Paket Anda
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">
+            Masukkan Nomor Resi (Tracking ID) untuk memantau perjalanan
+            pengiriman barang Anda.
+          </p>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              id="tracking-input"
+              placeholder="Masukkan nomor resi (Cth: LOG-882910)"
+              class="flex-grow px-4 py-3 rounded-xl text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+            <button
+              onclick="trackPackage()"
+              class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-6 py-3 rounded-xl transition flex items-center justify-center space-x-2"
+            >
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span>Lacak Paket</span>
+            </button>
+          </div>
+          <div class="mt-3 text-xs text-blue-200">
+            Coba Nomor Resi Sample:
+            <button
+              onclick="fillSampleResi('LOG-882910')"
+              class="underline hover:text-white mr-2"
+            >
+              LOG-882910
+            </button>
+            <button
+              onclick="fillSampleResi('LOG-992102')"
+              class="underline hover:text-white mr-2"
+            >
+              LOG-992102
+            </button>
+            <button
+              onclick="fillSampleResi('LOG-773821')"
+              class="underline hover:text-white"
+            >
+              LOG-773821
+            </button>
+          </div>
+        </div>
+
+        <!-- Tracking Result Details -->
+        <div
+          id="tracking-result"
+          class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hidden"
+        >
+          <div
+            class="bg-slate-900 text-white p-4 flex justify-between items-center"
+          >
+            <div>
+              <p class="text-xs text-slate-400">NOMOR RESI</p>
+              <h3
+                id="res-resi"
+                class="text-lg font-extrabold font-mono text-amber-400"
+              >
+                LOG-882910
+              </h3>
+            </div>
+            <div
+              id="res-badge"
+              class="bg-amber-500/20 text-amber-300 border border-amber-500/50 text-xs px-3 py-1 rounded-full font-bold"
+            >
+              Dalam Pengiriman Kurir
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <!-- Progress Bar -->
+            <div class="relative py-4">
+              <div
+                class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-slate-200"
+              >
+                <div
+                  id="progress-bar"
+                  class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600 transition-all duration-500"
+                  style="width: 75%"
+                ></div>
+              </div>
+              <div
+                class="flex justify-between text-xs font-bold text-slate-600"
+              >
+                <span id="step-dikirim" class="text-blue-600"
+                  ><i class="fa-solid fa-box mr-1"></i> Dikirim</span
+                >
+                <span id="step-transit" class="text-blue-600"
+                  ><i class="fa-solid fa-truck-ramp-box mr-1"></i> Transit</span
+                >
+                <span id="step-kurir" class="text-blue-600"
+                  ><i class="fa-solid fa-motorcycle mr-1"></i> Kurir</span
+                >
+                <span id="step-selesai" class="text-slate-400"
+                  ><i class="fa-solid fa-house-chimney-check mr-1"></i>
+                  Selesai</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl text-xs border border-slate-200"
+            >
+              <div>
+                <p class="text-slate-400 font-bold uppercase">Pengirim</p>
+                <p id="res-pengirim" class="font-bold text-slate-800 text-sm">
+                  Budi Santoso
+                </p>
+                <p id="res-asal" class="text-slate-600">Bandar Lampung</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-bold uppercase">
+                  Penerima Tujuan
+                </p>
+                <p id="res-penerima" class="font-bold text-slate-800 text-sm">
+                  Siti Rahma
+                </p>
+                <p id="res-tujuan" class="text-slate-600">Jakarta Selatan</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-bold uppercase">
+                  Layanan & Berat
+                </p>
+                <p id="res-layanan" class="font-bold text-blue-600 text-sm">
+                  Express
+                </p>
+                <p id="res-berat" class="text-slate-600">1.5 kg</p>
+              </div>
+            </div>
+
+            <!-- Bukti Penerimaan POD (Jika Selesai) -->
+            <div
+              id="pod-result-card"
+              class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl hidden"
+            >
+              <h4 class="font-bold text-emerald-800 text-sm mb-2">
+                <i class="fa-solid fa-file-signature mr-2"></i>Bukti Penerimaan
+                Digital (POD)
+              </h4>
+              <div class="flex flex-wrap gap-4 text-xs text-slate-700">
+                <div>
+                  <p class="text-slate-500 font-semibold">
+                    Tanda Tangan Digital:
+                  </p>
+                  <div
+                    id="pod-sig-preview"
+                    class="border bg-white p-2 rounded mt-1 font-serif italic text-emerald-700"
+                  >
+                    Deni K.
+                  </div>
+                </div>
+                <div>
+                  <p class="text-slate-500 font-semibold">
+                    Foto Penerimaan Paket:
+                  </p>
+                  <div
+                    id="pod-img-preview"
+                    class="border bg-white p-1 rounded mt-1 font-mono text-[10px] text-slate-500"
+                  >
+                    [Gambar Terlampir]
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm mb-3">
+                <i class="fa-solid fa-clock-rotate-left text-blue-600 mr-2"></i
+                >Riwayat Perjalanan Paket
+              </h4>
+              <div
+                id="res-timeline"
+                class="border-l-2 border-blue-600 pl-4 space-y-4 text-xs"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: DASHBOARD ADMIN ==================== -->
+      <section id="page-dashboard" class="space-y-6 hidden">
+        <!-- Alert Login Lock -->
+        <div
+          id="admin-lock-banner"
+          class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-2xl flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-3">
+            <i class="fa-solid fa-lock text-2xl text-amber-600"></i>
+            <div>
+              <h4 class="font-bold text-sm">Mode Tamu / Read-Only</h4>
+              <p class="text-xs text-amber-700">
+                Silakan Login Admin untuk menambah paket baru, mencetak resi
+                QR/Barcode, dan memperbarui status POD.
+              </p>
+            </div>
+          </div>
+          <button
+            onclick="openLoginModal()"
+            class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl"
+          >
+            Login Admin
+          </button>
+        </div>
+
+        <!-- Header Title -->
+        <div
+          class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
+        >
+          <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+              <i class="fa-solid fa-chart-pie text-blue-600 mr-2"></i>Dashboard
+              Manajemen Logistik
+            </h2>
+            <p class="text-xs text-slate-500">
+              Kelola transaksi, update status tracking resi, dan pantau
+              ringkasan statistik pengiriman.
+            </p>
+          </div>
+          <button
+            onclick="openAddModal()"
+            id="btn-add-pkg"
+            class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center space-x-1 opacity-50 cursor-not-allowed"
+            disabled
+          >
+            <i class="fa-solid fa-plus"></i>
+            <span>+ Input Data Penerima / Paket</span>
+          </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div
+            class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between"
+          >
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase">
+                Total Pengiriman
+              </p>
+              <p
+                id="count-total"
+                class="text-2xl font-extrabold text-slate-800 mt-1"
+              >
+                0
+              </p>
+            </div>
+            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg">
+              <i class="fa-solid fa-boxes-packing text-xl"></i>
+            </div>
+          </div>
+          <div
+            class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between"
+          >
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase">
+                Dalam Transit
+              </p>
+              <p
+                id="count-transit"
+                class="text-2xl font-extrabold text-amber-600 mt-1"
+              >
+                0
+              </p>
+            </div>
+            <div class="bg-amber-50 text-amber-600 p-3 rounded-lg">
+              <i class="fa-solid fa-truck-moving text-xl"></i>
+            </div>
+          </div>
+          <div
+            class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between"
+          >
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase">
+                Kurir Pengantar
+              </p>
+              <p
+                id="count-kurir"
+                class="text-2xl font-extrabold text-purple-600 mt-1"
+              >
+                0
+              </p>
+            </div>
+            <div class="bg-purple-50 text-purple-600 p-3 rounded-lg">
+              <i class="fa-solid fa-motorcycle text-xl"></i>
+            </div>
+          </div>
+          <div
+            class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between"
+          >
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase">
+                Telah Diterima
+              </p>
+              <p
+                id="count-diterima"
+                class="text-2xl font-extrabold text-emerald-600 mt-1"
+              >
+                0
+              </p>
+            </div>
+            <div class="bg-emerald-50 text-emerald-600 p-3 rounded-lg">
+              <i class="fa-solid fa-circle-check text-xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table & Search Controls -->
+        <div
+          class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+        >
+          <div
+            class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3"
+          >
+            <div class="relative w-full sm:w-80">
+              <i
+                class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"
+              ></i>
+              <input
+                type="text"
+                id="admin-search"
+                oninput="renderTable()"
+                placeholder="Cari Resi, Pengirim, atau Penerima..."
+                class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+              <label class="text-xs font-semibold text-slate-500"
+                >Filter Status:</label
+              >
+              <select
+                id="admin-filter"
+                onchange="renderTable()"
+                class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none"
+              >
+                <option value="ALL">Semua Status</option>
+                <option value="Di Transit">Di Transit</option>
+                <option value="Dalam Pengiriman Kurir">
+                  Dalam Pengiriman Kurir
+                </option>
+                <option value="Diterima">Diterima</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-600">
+              <thead
+                class="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b"
+              >
+                <tr>
+                  <th class="p-4">No. Resi</th>
+                  <th class="p-4">Pengirim & Tujuan</th>
+                  <th class="p-4">Layanan</th>
+                  <th class="p-4">Status Pengiriman</th>
+                  <th class="p-4">Kurir</th>
+                  <th class="p-4 text-center">Aksi / Cetak</th>
+                </tr>
+              </thead>
+              <tbody id="table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ==================== MODAL LOGIN ADMIN ==================== -->
+    <div
+      id="login-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4"
+      >
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="font-bold text-slate-800 text-base">
+            <i class="fa-solid fa-lock text-blue-600 mr-2"></i>Login Admin
+            Logistik
+          </h3>
+          <button
+            onclick="closeLoginModal()"
+            class="text-slate-400 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
+          <div>
+            <label class="font-semibold text-slate-700">Username Admin</label>
+            <input
+              type="text"
+              id="login-user"
+              required
+              value="admin"
+              class="w-full mt-1 p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label class="font-semibold text-slate-700">Password</label>
+            <input
+              type="password"
+              id="login-pass"
+              required
+              value="admin123"
+              class="w-full mt-1 p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <p class="text-[10px] text-slate-400">
+            Default Credentials: Username <b>admin</b> | Password
+            <b>admin123</b>
+          </p>
+          <button
+            type="submit"
+            class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow"
+          >
+            Masuk Ke Dashboard
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL 1: FORM INPUT DATA PENERIMA & PENGIRIM ==================== -->
+    <div
+      id="add-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="font-bold text-slate-800 text-base">
+            Step 1: Input Data Penerima & Pengiriman
+          </h3>
+          <button
+            onclick="closeAddModal()"
+            class="text-slate-400 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <form onsubmit="saveNewPackage(event)" class="space-y-3 text-xs">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="font-semibold text-slate-700">Nama Pengirim</label>
+              <input
+                type="text"
+                id="input-pengirim"
+                required
+                placeholder="Cth: Budi Santoso"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label class="font-semibold text-slate-700">Kota Asal</label>
+              <input
+                type="text"
+                id="input-asal"
+                required
+                placeholder="Cth: Bandar Lampung"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="font-semibold text-slate-700">Nama Penerima</label>
+              <input
+                type="text"
+                id="input-penerima"
+                required
+                placeholder="Cth: Siti Rahma"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label class="font-semibold text-slate-700">Kota Tujuan</label>
+              <input
+                type="text"
+                id="input-tujuan"
+                required
+                placeholder="Cth: Jakarta Selatan"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="font-semibold text-slate-700"
+              >Alamat Lengkap Tujuan</label
+            >
+            <textarea
+              id="input-alamat"
+              required
+              placeholder="Jl. Sudirman No. 45, Kebayoran Baru..."
+              class="w-full mt-1 p-2 border rounded-lg h-16"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="font-semibold text-slate-700">Layanan</label>
+              <select
+                id="input-layanan"
+                class="w-full mt-1 p-2 border rounded-lg font-semibold"
+              >
+                <option value="Express">Express (1-2 Hari)</option>
+                <option value="Eco">Eco / Reguler (3-5 Hari)</option>
+              </select>
+            </div>
+            <div>
+              <label class="font-semibold text-slate-700">Berat (Kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="input-berat"
+                required
+                value="1.0"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label class="font-semibold text-slate-700"
+                >Kurir Pengantar</label
+              >
+              <input
+                type="text"
+                id="input-kurir"
+                required
+                placeholder="Ahmad Express"
+                class="w-full mt-1 p-2 border rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div class="pt-3 flex justify-end space-x-2 border-t">
+            <button
+              type="button"
+              onclick="closeAddModal()"
+              class="px-4 py-2 border rounded-lg font-semibold text-slate-600"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+            >
+              Simpan & Generate ID
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL 2: GENERATE TRACKING ID (QR & BARCODE PRINT) ==================== -->
+    <div
+      id="label-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4 text-center"
+      >
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-slate-800 text-sm">
+            Step 2: Generate Tracking ID Digital
+          </h3>
+          <button
+            onclick="closeLabelModal()"
+            class="text-slate-400 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <div
+          id="label-print-area"
+          class="border-2 border-dashed border-slate-300 p-4 rounded-xl bg-slate-50 space-y-3"
+        >
+          <div class="text-left border-b pb-2">
+            <p class="text-[10px] font-bold text-slate-400">
+              LOGITRACK EXPRESS SHIPPING LABEL
+            </p>
+            <h4
+              id="lbl-resi"
+              class="text-xl font-mono font-extrabold text-blue-600"
+            >
+              LOG-882910
+            </h4>
+          </div>
+
+          <!-- QR Code Target Container -->
+          <div class="flex justify-center my-2">
+            <div id="qrcode-box" class="p-2 bg-white border rounded"></div>
+          </div>
+
+          <!-- Barcode Target SVG Container -->
+          <div class="flex justify-center">
+            <svg id="barcode-box"></svg>
+          </div>
+
+          <div
+            class="text-left text-[11px] space-y-1 bg-white p-2 rounded border"
+          >
+            <p><b>Pengirim:</b> <span id="lbl-pengirim">-</span></p>
+            <p><b>Penerima:</b> <span id="lbl-penerima">-</span></p>
+            <p><b>Tujuan:</b> <span id="lbl-tujuan">-</span></p>
+            <p>
+              <b>Layanan:</b>
+              <span id="lbl-layanan" class="font-bold text-blue-600">-</span>
+            </p>
+          </div>
+        </div>
+
+        <button
+          onclick="window.print()"
+          class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow"
+        >
+          <i class="fa-solid fa-print mr-1"></i> Cetak Label Resi
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL 3 & 4: UPDATE STATUS & BUKTI PENERIMAAN (POD) ==================== -->
+    <div
+      id="status-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4"
+      >
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="font-bold text-slate-800 text-base">
+            Step 3 & 4: Update Status & Proof of Delivery
+          </h3>
+          <button
+            onclick="closeStatusModal()"
+            class="text-slate-400 hover:text-slate-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <form onsubmit="saveStatusUpdate(event)" class="space-y-3 text-xs">
+          <input type="hidden" id="edit-index" />
+
+          <div>
+            <label class="font-semibold text-slate-700"
+              >Status Pengiriman Paket</label
+            >
+            <select
+              id="edit-status"
+              onchange="togglePODFields()"
+              class="w-full mt-1 p-2.5 border rounded-xl font-semibold focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="Di Transit">Di Transit (Scan Pos/Hub)</option>
+              <option value="Dalam Pengiriman Kurir">
+                Dalam Pengiriman Kurir (Out for Delivery)
+              </option>
+              <option value="Diterima">Diterima (Selesai / POD)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-semibold text-slate-700"
+              >Catatan Perjalanan Paket</label
+            >
+            <input
+              type="text"
+              id="edit-note"
+              required
+              placeholder="Cth: Tiba di Hub Transit Jakarta..."
+              class="w-full mt-1 p-2 border rounded-lg"
+            />
+          </div>
+
+          <!-- Field Khusus POD (Tanda Tangan & Foto) saat status "Diterima" -->
+          <div
+            id="pod-input-fields"
+            class="space-y-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200 hidden"
+          >
+            <p class="font-bold text-emerald-800">
+              <i class="fa-solid fa-file-signature mr-1"></i>Bukti Penerimaan
+              (Proof of Delivery)
+            </p>
+            <div>
+              <label class="font-semibold text-slate-700"
+                >Tanda Tangan / Nama Penerima</label
+              >
+              <input
+                type="text"
+                id="edit-pod-sig"
+                placeholder="Cth: Deni K. (Diterima YBS)"
+                class="w-full mt-1 p-2 border rounded-lg bg-white"
+              />
+            </div>
+            <div>
+              <label class="font-semibold text-slate-700"
+                >Foto Penerimaan Paket (Simulasi Upload)</label
+              >
+              <input
+                type="file"
+                id="edit-pod-img"
+                accept="image/*"
+                class="w-full mt-1 p-1 bg-white border rounded-lg text-slate-500"
+              />
+            </div>
+          </div>
+
+          <div class="pt-3 flex justify-end space-x-2 border-t">
+            <button
+              type="button"
+              onclick="closeStatusModal()"
+              class="px-4 py-2 border rounded-lg font-semibold text-slate-600"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+            >
+              Simpan Status
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer
+      class="bg-slate-900 text-slate-400 text-xs py-4 text-center mt-auto border-t border-slate-800"
+    >
+      <p>
+        © 2026 LogiTrack Express - Sistem Manajemen & Pelacakan Logistik Terpadu
+      </p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+      // Data State Store
+      let isAdminLoggedIn = false;
+      let packageData = [
+        {
+          resi: "LOG-882910",
+          pengirim: "Budi Santoso",
+          asal: "Bandar Lampung",
+          penerima: "Siti Rahma",
+          tujuan: "Jakarta Selatan",
+          layanan: "Express",
+          berat: "1.5",
+          tanggal: "2026-09-28",
+          status: "Dalam Pengiriman Kurir",
+          kurir: "Ahmad Express",
+          podSig: "",
+          podImg: "",
+          history: [
+            {
+              time: "28 Sep 2026 - 08:00",
+              status: "Paket diterima oleh agen asal Bandar Lampung.",
+            },
+            {
+              time: "28 Sep 2026 - 14:30",
+              status: "Paket dalam perjalanan transit ke Hub Jakarta.",
+            },
+            {
+              time: "29 Sep 2026 - 07:15",
+              status: "Paket tiba di Hub Jakarta Selatan.",
+            },
+            {
+              time: "29 Sep 2026 - 09:00",
+              status: "Paket dibawa kurir Ahmad menuju alamat tujuan.",
+            },
+          ],
+        },
+        {
+          resi: "LOG-992102",
+          pengirim: "Toko Elektronik Maju",
+          asal: "Surabaya",
+          penerima: "Deni Kurniawan",
+          tujuan: "Bandung",
+          layanan: "Eco",
+          berat: "3.0",
+          tanggal: "2026-09-25",
+          status: "Diterima",
+          kurir: "Rian Cargo",
+          podSig: "Deni K. (Tanda Tangan Verified)",
+          podImg: "foto_paket_diterima.jpg",
+          history: [
+            {
+              time: "25 Sep 2026 - 10:00",
+              status: "Paket diproses di Surabaya.",
+            },
+            { time: "26 Sep 2026 - 11:00", status: "Tiba di Hub Bandung." },
+            {
+              time: "27 Sep 2026 - 15:20",
+              status:
+                "Paket telah diterima oleh Deni Kurniawan (Bukti Foto Disimpan).",
+            },
+          ],
+        },
+        {
+          resi: "LOG-773821",
+          pengirim: "PT Sumber Makmur",
+          asal: "Medan",
+          penerima: "Eko Prasetyo",
+          tujuan: "Palembang",
+          layanan: "Express",
+          berat: "2.0",
+          tanggal: "2026-09-29",
+          status: "Di Transit",
+          kurir: "Hery Logistics",
+          podSig: "",
+          podImg: "",
+          history: [
+            {
+              time: "29 Sep 2026 - 16:00",
+              status: "Paket telah di-scan di Hub Utama Medan.",
+            },
+          ],
+        },
+      ];
+
+      // Auth Functions
+      function openLoginModal() {
+        document.getElementById("login-modal").classList.remove("hidden");
+      }
+      function closeLoginModal() {
+        document.getElementById("login-modal").classList.add("hidden");
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById("login-user").value;
+        const pass = document.getElementById("login-pass").value;
+
+        if (user === "admin" && pass === "admin123") {
+          isAdminLoggedIn = true;
+          closeLoginModal();
+          updateAuthUI();
+          renderTable();
+          alert("Login Admin Berhasil!");
+        } else {
+          alert("Username atau Password salah!");
+        }
+      }
+
+      function logoutAdmin() {
+        isAdminLoggedIn = false;
+        updateAuthUI();
+        renderTable();
+        alert("Anda telah logout dari Admin.");
+      }
+
+      function updateAuthUI() {
+        const btnLogin = document.getElementById("btn-login");
+        const btnLogout = document.getElementById("btn-logout");
+        const lockBanner = document.getElementById("admin-lock-banner");
+        const btnAdd = document.getElementById("btn-add-pkg");
+
+        if (isAdminLoggedIn) {
+          btnLogin.classList.add("hidden");
+          btnLogout.classList.remove("hidden");
+          lockBanner.classList.add("hidden");
+          btnAdd.disabled = false;
+          btnAdd.classList.remove("opacity-50", "cursor-not-allowed");
+        } else {
+          btnLogin.classList.remove("hidden");
+          btnLogout.classList.add("hidden");
+          lockBanner.classList.remove("hidden");
+          btnAdd.disabled = true;
+          btnAdd.classList.add("opacity-50", "cursor-not-allowed");
+        }
+      }
+
+      // Navigation Tab Switching
+      function switchTab(tabName) {
+        document.getElementById("page-infographic").classList.add("hidden");
+        document.getElementById("page-tracking").classList.add("hidden");
+        document.getElementById("page-dashboard").classList.add("hidden");
+
+        document.getElementById("tab-infographic").className =
+          "px-3 py-2 rounded-lg transition-all text-slate-300 hover:text-white";
+        document.getElementById("tab-tracking").className =
+          "px-3 py-2 rounded-lg transition-all text-slate-300 hover:text-white";
+        document.getElementById("tab-dashboard").className =
+          "px-3 py-2 rounded-lg transition-all text-slate-300 hover:text-white";
+
+        if (tabName === "infographic") {
+          document
+            .getElementById("page-infographic")
+            .classList.remove("hidden");
+          document.getElementById("tab-infographic").className =
+            "px-3 py-2 rounded-lg transition-all text-blue-400 bg-slate-700 shadow-sm font-bold";
+        } else if (tabName === "tracking") {
+          document.getElementById("page-tracking").classList.remove("hidden");
+          document.getElementById("tab-tracking").className =
+            "px-3 py-2 rounded-lg transition-all text-blue-400 bg-slate-700 shadow-sm font-bold";
+        } else if (tabName === "dashboard") {
+          document.getElementById("page-dashboard").classList.remove("hidden");
+          document.getElementById("tab-dashboard").className =
+            "px-3 py-2 rounded-lg transition-all text-blue-400 bg-slate-700 shadow-sm font-bold";
+          renderTable();
+        }
+      }
+
+      // Fill Sample Resi & Track
+      function fillSampleResi(code) {
+        document.getElementById("tracking-input").value = code;
+        trackPackage();
+      }
+
+      function trackPackage() {
+        const inputVal = document.getElementById("tracking-input").value.trim();
+        const resultBox = document.getElementById("tracking-result");
+
+        if (!inputVal) {
+          alert("Masukkan nomor resi terlebih dahulu!");
+          return;
+        }
+
+        const item = packageData.find(
+          (p) => p.resi.toLowerCase() === inputVal.toLowerCase(),
+        );
+
+        if (!item) {
+          alert("Nomor resi tidak ditemukan!");
+          resultBox.classList.add("hidden");
+          return;
+        }
+
+        // Populate Text Fields
+        document.getElementById("res-resi").innerText = item.resi;
+        document.getElementById("res-pengirim").innerText = item.pengirim;
+        document.getElementById("res-asal").innerText = item.asal;
+        document.getElementById("res-penerima").innerText = item.penerima;
+        document.getElementById("res-tujuan").innerText = item.tujuan;
+        document.getElementById("res-layanan").innerText = item.layanan;
+        document.getElementById("res-berat").innerText = item.berat + " kg";
+        document.getElementById("res-badge").innerText = item.status;
+
+        // Update Progress Bar Flow
+        const pBar = document.getElementById("progress-bar");
+        if (item.status === "Di Transit") {
+          pBar.style.width = "40%";
+        } else if (item.status === "Dalam Pengiriman Kurir") {
+          pBar.style.width = "75%";
+        } else if (item.status === "Diterima") {
+          pBar.style.width = "100%";
+        }
+
+        // POD Section Display
+        const podCard = document.getElementById("pod-result-card");
+        if (item.status === "Diterima" && item.podSig) {
+          podCard.classList.remove("hidden");
+          document.getElementById("pod-sig-preview").innerText = item.podSig;
+          document.getElementById("pod-img-preview").innerText = item.podImg
+            ? "Foto Bukti File: " + item.podImg
+            : "Foto Bukti Tervalidasi";
+        } else {
+          podCard.classList.add("hidden");
+        }
+
+        // Timeline Items
+        const timelineBox = document.getElementById("res-timeline");
+        timelineBox.innerHTML = "";
+        item.history.forEach((h) => {
+          timelineBox.innerHTML += `
+                    <div class="relative pl-2">
+                        <div class="font-bold text-slate-800">${h.status}</div>
+                        <div class="text-slate-400 text-[10px]">${h.time}</div>
+                    </div>
+                `;
+        });
+
+        resultBox.classList.remove("hidden");
+      }
+
+      // Render Table Dashboard
+      function renderTable() {
+        const tbody = document.getElementById("table-body");
+        const search = document
+          .getElementById("admin-search")
+          .value.toLowerCase();
+        const filter = document.getElementById("admin-filter").value;
+
+        tbody.innerHTML = "";
+        let cTransit = 0,
+          cKurir = 0,
+          cDiterima = 0;
+
+        packageData.forEach((pkg, index) => {
+          if (pkg.status === "Di Transit") cTransit++;
+          if (pkg.status === "Dalam Pengiriman Kurir") cKurir++;
+          if (pkg.status === "Diterima") cDiterima++;
+
+          const matchSearch =
+            pkg.resi.toLowerCase().includes(search) ||
+            pkg.pengirim.toLowerCase().includes(search) ||
+            pkg.penerima.toLowerCase().includes(search);
+          const matchFilter = filter === "ALL" || pkg.status === filter;
+
+          if (matchSearch && matchFilter) {
+            let badgeClass = "bg-amber-100 text-amber-800";
+            if (pkg.status === "Dalam Pengiriman Kurir")
+              badgeClass = "bg-purple-100 text-purple-800";
+            if (pkg.status === "Diterima")
+              badgeClass = "bg-emerald-100 text-emerald-800";
+
+            tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 font-mono font-bold text-blue-600">${pkg.resi}</td>
+                            <td class="p-4">
+                                <div class="font-bold text-slate-800">${pkg.pengirim} (${pkg.asal})</div>
+                                <div class="text-slate-400 text-[11px]">Ke: ${pkg.penerima} (${pkg.tujuan})</div>
+                            </td>
+                            <td class="p-4">
+                                <span class="font-semibold text-slate-700">${pkg.layanan}</span>
+                                <div class="text-slate-400 text-[10px]">${pkg.berat} kg</div>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2.5 py-1 rounded-full font-bold text-[10px] ${badgeClass}">
+                                    ${pkg.status}
+                                </span>
+                            </td>
+                            <td class="p-4 text-slate-700">${pkg.kurir}</td>
+                            <td class="p-4 text-center space-x-2">
+                                <button onclick="generateLabelModal('${pkg.resi}')" class="text-slate-600 hover:text-slate-900 font-bold" title="Cetak QR & Barcode">
+                                    <i class="fa-solid fa-qrcode text-base"></i>
+                                </button>
+                                ${
+                                  isAdminLoggedIn
+                                    ? `
+                                    <button onclick="openStatusModal(${index})" class="text-blue-600 hover:text-blue-800 font-bold" title="Update Status">
+                                        <i class="fa-solid fa-pen-to-square text-base"></i>
+                                    </button>
+                                    <button onclick="deletePackage(${index})" class="text-red-500 hover:text-red-700 font-bold" title="Hapus">
+                                        <i class="fa-solid fa-trash text-base"></i>
+                                    </button>
+                                `
+                                    : ""
+                                }
+                            </td>
+                        </tr>
+                    `;
+          }
+        });
+
+        document.getElementById("count-total").innerText = packageData.length;
+        document.getElementById("count-transit").innerText = cTransit;
+        document.getElementById("count-kurir").innerText = cKurir;
+        document.getElementById("count-diterima").innerText = cDiterima;
+      }
+
+      // Modal Handlers (Step 1: Input Paket)
+      function openAddModal() {
+        if (!isAdminLoggedIn) {
+          alert("Harap login sebagai Admin terlebih dahulu!");
+          return;
+        }
+        document.getElementById("add-modal").classList.remove("hidden");
+      }
+      function closeAddModal() {
+        document.getElementById("add-modal").classList.add("hidden");
+      }
+
+      function saveNewPackage(e) {
+        e.preventDefault();
+        const pengirim = document.getElementById("input-pengirim").value;
+        const asal = document.getElementById("input-asal").value;
+        const penerima = document.getElementById("input-penerima").value;
+        const tujuan = document.getElementById("input-tujuan").value;
+        const layanan = document.getElementById("input-layanan").value;
+        const berat = document.getElementById("input-berat").value;
+        const kurir = document.getElementById("input-kurir").value;
+
+        const randomResi = "LOG-" + Math.floor(100000 + Math.random() * 900000);
+        const today = new Date().toISOString().split("T")[0];
+
+        const newPkg = {
+          resi: randomResi,
+          pengirim: pengirim,
+          asal: asal,
+          penerima: penerima,
+          tujuan: tujuan,
+          layanan: layanan,
+          berat: berat,
+          tanggal: today,
+          status: "Di Transit",
+          kurir: kurir,
+          podSig: "",
+          podImg: "",
+          history: [
+            {
+              time: today + " - Input Baru",
+              status: "Paket berhasil didaftarkan di sistem oleh Admin.",
+            },
+          ],
+        };
+
+        packageData.unshift(newPkg);
+        closeAddModal();
+        renderTable();
+        generateLabelModal(randomResi);
+      }
+
+      // Modal Handlers (Step 2: Generate QR & Barcode)
+      function generateLabelModal(resi) {
+        const item = packageData.find((p) => p.resi === resi);
+        if (!item) return;
+
+        document.getElementById("lbl-resi").innerText = item.resi;
+        document.getElementById("lbl-pengirim").innerText =
+          item.pengirim + " (" + item.asal + ")";
+        document.getElementById("lbl-penerima").innerText = item.penerima;
+        document.getElementById("lbl-tujuan").innerText = item.tujuan;
+        document.getElementById("lbl-layanan").innerText =
+          item.layanan + " (" + item.berat + " kg)";
+
+        // Clear previous codes
+        document.getElementById("qrcode-box").innerHTML = "";
+
+        // Render QR Code
+        new QRCode(document.getElementById("qrcode-box"), {
+          text: item.resi,
+          width: 100,
+          height: 100,
+        });
+
+        // Render Barcode
+        JsBarcode("#barcode-box", item.resi, {
+          format: "CODE128",
+          width: 1.5,
+          height: 40,
+          displayValue: false,
+        });
+
+        document.getElementById("label-modal").classList.remove("hidden");
+      }
+      function closeLabelModal() {
+        document.getElementById("label-modal").classList.add("hidden");
+      }
+
+      // Modal Handlers (Step 3 & 4: Status Updating & POD)
+      function openStatusModal(index) {
+        document.getElementById("edit-index").value = index;
+        document.getElementById("edit-status").value =
+          packageData[index].status;
+        document.getElementById("edit-note").value = "";
+        document.getElementById("edit-pod-sig").value =
+          packageData[index].podSig || "";
+        togglePODFields();
+        document.getElementById("status-modal").classList.remove("hidden");
+      }
+      function closeStatusModal() {
+        document.getElementById("status-modal").classList.add("hidden");
+      }
+
+      function togglePODFields() {
+        const st = document.getElementById("edit-status").value;
+        const podBox = document.getElementById("pod-input-fields");
+        if (st === "Diterima") {
+          podBox.classList.remove("hidden");
+        } else {
+          podBox.classList.add("hidden");
+        }
+      }
+
+      function saveStatusUpdate(e) {
+        e.preventDefault();
+        const idx = document.getElementById("edit-index").value;
+        const newStatus = document.getElementById("edit-status").value;
+        const note = document.getElementById("edit-note").value;
+        const sig = document.getElementById("edit-pod-sig").value;
+        const fileInput = document.getElementById("edit-pod-img");
+
+        const now = new Date();
+        const timeStr =
+          now.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }) +
+          " - " +
+          now.toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+        packageData[idx].status = newStatus;
+        packageData[idx].history.push({
+          time: timeStr,
+          status: note,
+        });
+
+        if (newStatus === "Diterima") {
+          packageData[idx].podSig = sig || "Verified Penerima";
+          if (fileInput.files.length > 0) {
+            packageData[idx].podImg = fileInput.files[0].name;
+          }
+        }
+
+        closeStatusModal();
+        renderTable();
+        alert("Status berhasil diperbarui!");
+      }
+
+      function deletePackage(index) {
+        if (confirm("Apakah Anda yakin ingin menghapus data resi ini?")) {
+          packageData.splice(index, 1);
+          renderTable();
+        }
+      }
+
+      // Initialize App UI
+      updateAuthUI();
+    </script>
+  </body>
+</html>
